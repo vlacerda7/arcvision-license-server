@@ -81,3 +81,27 @@ def latest():
         "url": "http://192.168.75.78:8000/files/ArcVision_1.1.0.exe",
         "sig": "http://192.168.75.78:8000/files/ArcVision_1.1.0.exe.sig"
     }
+@app.post("/revoke")
+def revoke_license(data: dict):
+    token = data.get("token")
+    hwid = data.get("hwid")
+
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("UPDATE licenses SET status='revoked' WHERE token=? AND hwid=?", (token, hwid))
+    conn.commit()
+    conn.close()
+
+    return {"status": "revoked"}
+@app.get("/license_status")
+def license_status(token: str, hwid: str):
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("SELECT status FROM licenses WHERE token=? AND hwid=?", (token, hwid))
+    row = c.fetchone()
+    conn.close()
+
+    if not row:
+        return {"status": "invalid"}
+
+    return {"status": row[0]}
