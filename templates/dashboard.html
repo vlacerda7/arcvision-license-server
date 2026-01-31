@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ArcVision Control Panel</title>
+    <style>
+        body { font-family: Arial; background: #111; color: white; }
+        .cards { display: flex; gap: 20px; margin-bottom: 20px; }
+        .card { background: #222; padding: 20px; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px; border-bottom: 1px solid #333; }
+        th { background: #222; }
+    </style>
+</head>
+<body>
+
+<h2>ArcVision License Dashboard</h2>
+
+<div class="cards">
+    <div class="card">Total Activations<br><h2>{{ total }}</h2></div>
+    <div class="card">Today<br><h2>{{ today }}</h2></div>
+    <div class="card">Unique Machines<br><h2>{{ machines }}</h2></div>
+</div>
+
+<h3>Recent Activations</h3>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Token</th>
+        <th>HWID</th>
+        <th>Date</th>
+    </tr>
+    {% for r in rows %}
+    <tr>
+        <td>{{ r[0] }}</td>
+        <td>{{ r[1][:30] }}...</td>
+        <td>{{ r[2][:20] }}...</td>
+        <td>{{ r[3] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
